@@ -1,0 +1,7 @@
+Aby uruchomić kod i zobaczyć aplikację w działaniu wykonaj:
+1. Zapisz kod źródłowy aplikacji z rozszerzeniem .py.
+2. Zapisz kod bazy danych również z rozszerzeniem .py.
+3. Umieść oba kody w jednym katalogu.
+4. Przy pomocy skrótu klawiszowego WINDOWS+R włączy się wiersz poleceń, komendą cd zmieniasz śnieżkę na tą, gdzie znajduje się twój katalog.
+5. Komendą "python baza_danych.py" włączasz bazę, powinien stworzyć się plik .db w katalogu.
+6. Komendą "python sklep_rowerowy.py" włączasz aplikację.

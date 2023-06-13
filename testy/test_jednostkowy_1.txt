@@ -1,0 +1,54 @@
+import sqlite3
+import unittest
+
+class TestBazaDanych(unittest.TestCase):
+    def setUp(self):
+        self.conn = sqlite3.connect(':memory:')
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS czesci (
+            id INTEGER PRIMARY KEY,
+            nazwa TEXT,
+            producent TEXT,
+            cena REAL,
+            ilosc INTEGER
+        )''')
+
+    def tearDown(self):
+        self.cursor.execute('DROP TABLE czesci')
+        self.conn.close()
+
+    def test_dodaj_czesc(self):
+        # Sprawdź dodawanie jednego rekordu do tabeli "czesci"
+        dane_czesci = (1, 'Opona', 'Schwalbe', 50.00, 10)
+        self.cursor.execute('INSERT INTO czesci VALUES (?, ?, ?, ?, ?)', dane_czesci)
+        self.conn.commit()
+
+        self.cursor.execute('SELECT COUNT(*) FROM czesci')
+        result = self.cursor.fetchone()[0]
+        self.assertEqual(result, 1)
+
+    def test_dodaj_wiele_czesci(self):
+        # Sprawdź dodawanie wielu rekordów do tabeli "czesci"
+        dane_czesci = [
+            (1, 'Opona', 'Schwalbe', 50.00, 10),
+            (2, 'Siodełko', 'Brooks', 100.00, 5),
+            (3, 'Kierownica', 'Ritchey', 80.00, 8),
+            (4, 'Przerzutka', 'Shimano', 120.00, 4),
+            (5, 'Hamulce', 'Magura', 150.00, 6)
+        ]
+        self.cursor.executemany('INSERT INTO czesci VALUES (?, ?, ?, ?, ?)', dane_czesci)
+        self.conn.commit()
+
+        self.cursor.execute('SELECT COUNT(*) FROM czesci')
+        result = self.cursor.fetchone()[0]
+        self.assertEqual(result, 5)
+
+if __name__ == '__main__':
+    unittest.main()
+
+
+# W powyższym przykładzie przedstawiono testy jednostkowe dla funkcji 'test_dodaj_czesc' oraz 'test_dodaj_wiele_czesci' , które sprawdzają poprawność dodawania rekordów do tabeli "czesci"
+Przykładowe testy wykonują się na bazie danych w pamięci (':memory:'), ale można je dostosować do działania na pliku bazy danych.
+
+# W testach wykorzystano moduł 'unitest' , który jest wbudowany w Pythona. Testy jednostkowe pozwalają na automatyczne sprawdzanie poprawności działania kodu i są istotne w procesie tworzenia aplikacji.
+ 

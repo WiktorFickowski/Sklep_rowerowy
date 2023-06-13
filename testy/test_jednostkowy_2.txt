@@ -1,0 +1,40 @@
+# W poniższym teście jednostkowym sprawdzamy funkcję test_wypelnij_ramy, która wypełnia tabelę "ramy" przykładowymi danymi. 
+Test sprawdza, czy po wypełnieniu tabeli, liczba rekordów jest zgodna z oczekiwaniami (5 w tym przypadku).
+
+import sqlite3
+import unittest
+
+class TestBazaDanych(unittest.TestCase):
+    def setUp(self):
+        self.conn = sqlite3.connect(':memory:')
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS ramy (
+            id INTEGER PRIMARY KEY,
+            nazwa TEXT,
+            producent TEXT,
+            material TEXT,
+            cena REAL
+        )''')
+
+    def tearDown(self):
+        self.cursor.execute('DROP TABLE ramy')
+        self.conn.close()
+
+    def test_wypelnij_ramy(self):
+        # Sprawdź wypełnianie tabeli "ramy" przykładowymi danymi
+        dane_ramy = [
+            (1, 'Rama MTB', 'Trek', 'Aluminiowa', 500.00),
+            (2, 'Rama szosowa', 'Specialized', 'Węglowa', 1000.00),
+            (3, 'Rama miejska', 'Giant', 'Stalowa', 300.00),
+            (4, 'Rama BMX', 'Redline', 'Aluminiowa', 400.00),
+            (5, 'Rama trekkingowa', 'Scott', 'Aluminiowa', 600.00)
+        ]
+        self.cursor.executemany('INSERT INTO ramy VALUES (?, ?, ?, ?, ?)', dane_ramy)
+        self.conn.commit()
+
+        self.cursor.execute('SELECT COUNT(*) FROM ramy')
+        result = self.cursor.fetchone()[0]
+        self.assertEqual(result, 5)
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,0 +1,39 @@
+# W tym teście jednostkowym funkcja test_odczytaj_akcesoria sprawdza, czy odczyt danych z tabeli "akcesoria" zwraca oczekiwaną liczbę rekordów (5 w tym przypadku).
+
+
+import sqlite3
+import unittest
+
+class TestBazaDanych(unittest.TestCase):
+    def setUp(self):
+        self.conn = sqlite3.connect(':memory:')
+        self.cursor = self.conn.cursor()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS akcesoria (
+            id INTEGER PRIMARY KEY,
+            nazwa TEXT,
+            producent TEXT,
+            cena REAL,
+            ilosc INTEGER
+        )''')
+        dane_akcesoria = [
+            (1, 'Licznik rowerowy', 'Cateye', 30.00, 7),
+            (2, 'Bidon', 'Elite', 10.00, 10),
+            (3, 'Lampa przednia', 'Knog', 40.00, 6),
+            (4, 'Zapięcie rowerowe', 'Abus', 20.00, 8),
+            (5, 'Kask', 'Giro', 100.00, 4)
+        ]
+        self.cursor.executemany('INSERT INTO akcesoria VALUES (?, ?, ?, ?, ?)', dane_akcesoria)
+        self.conn.commit()
+
+    def tearDown(self):
+        self.cursor.execute('DROP TABLE akcesoria')
+        self.conn.close()
+
+    def test_odczytaj_akcesoria(self):
+        # Sprawdź odczyt danych z tabeli "akcesoria"
+        self.cursor.execute('SELECT COUNT(*) FROM akcesoria')
+        result = self.cursor.fetchone()[0]
+        self.assertEqual(result, 5)
+
+if __name__ == '__main__':
+    unittest.main()

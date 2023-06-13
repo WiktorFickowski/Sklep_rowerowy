@@ -1,0 +1,53 @@
+import sqlite3
+
+# Utwórz połączenie z bazą danych
+conn = sqlite3.connect('baza_danych.db')
+
+# Utwórz kursor do wykonywania poleceń SQL
+cursor = conn.cursor()
+
+# Wypełnij tabelę "czesci" przykładowymi danymi
+dane_czesci = [
+    (6, 'Pedal', 'Shimano', 50.00, 3),
+    (7, 'Korba', 'SRAM', 120.00, 2),
+    (8, 'Kaseta', 'Shimano', 80.00, 4),
+    (9, 'Kierownica', 'Truvativ', 200.00, 5),
+    (10, 'Widelec', 'RockShox', 300.00, 1)
+]
+cursor.executemany('INSERT INTO czesci VALUES (?, ?, ?, ?, ?)', dane_czesci)
+
+# Wypełnij tabelę "ramy" przykładowymi danymi
+dane_ramy = [
+    (6, 'Rama górska', 'Cannondale', 'Aluminiowa', 600.00),
+    (7, 'Rama szosowa aero', 'Cervelo', 'Węglowa', 1500.00),
+    (8, 'Rama miejska damska', 'Pashley', 'Stalowa', 400.00),
+    (9, 'Rama dirt', 'NS Bikes', 'Aluminiowa', 500.00),
+    (10, 'Rama trekkingowa damska', 'Kalkhoff', 'Aluminiowa', 700.00)
+]
+cursor.executemany('INSERT INTO ramy VALUES (?, ?, ?, ?, ?)', dane_ramy)
+
+# Wypełnij tabelę "kola" przykładowymi danymi
+dane_kola = [
+    (6, 'Koło górskie', 'Hope', 29, 400.00),
+    (7, 'Koło aero', 'ENVE', 700, 1200.00),
+    (8, 'Koło miejskie', 'Shimano', 28, 150.00),
+    (9, 'Koło BMX Street', 'BSD', 20, 200.00),
+    (10, 'Koło trekkingowe', 'Ryde', 28, 250.00)
+]
+cursor.executemany('INSERT INTO kola VALUES (?, ?, ?, ?, ?)', dane_kola)
+
+# Wypełnij tabelę "akcesoria" przykładowymi danymi
+dane_akcesoria = [
+    (6, 'Pompka', 'Topeak', 30.00, 5),
+    (7, 'Kask dziecięcy', 'Bell', 40.00, 3),
+    (8, 'Koszyk', 'Basil', 25.00, 7),
+    (9, 'Dzwonek', 'Crane', 10.00, 10),
+    (10, 'Bagażnik', 'Thule', 80.00, 2)
+]
+cursor.executemany('INSERT INTO akcesoria VALUES (?, ?, ?, ?, ?)', dane_akcesoria)
+
+# Zatwierdź zmiany w bazie danych
+conn.commit()
+
+# Zamknij połączenie z bazą danych
+conn.close()
